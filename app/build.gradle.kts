@@ -5,13 +5,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.homeeats"
+    namespace = "com.project.homeeats"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.example.homeeats"
+        applicationId = "com.project.homeeats"
         minSdk = 24
         targetSdk = 36
         versionCode = 1

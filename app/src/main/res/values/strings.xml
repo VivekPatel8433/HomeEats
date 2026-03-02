@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">HomeEats</string>
+    <string name="homeeats_text">HomeEats</string>
+    <string name="app_logo_text">App Logo</string>
+    <string name="textalpha_text">textAlpha</string>
+    <string name="every_hunger_matters_text">Every Hunger Matters</string>
 </resources>
