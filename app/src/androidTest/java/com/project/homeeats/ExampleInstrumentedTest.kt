@@ -1,4 +1,4 @@
-package com.example.homeeats
+package com.project.homeeats
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

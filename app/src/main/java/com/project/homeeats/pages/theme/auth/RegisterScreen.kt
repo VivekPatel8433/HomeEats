@@ -1,4 +1,4 @@
-package com.example.homeeats.pages.theme.auth
+package com.project.homeeats.pages.theme.auth
 
 class RegisterScreen {
 }

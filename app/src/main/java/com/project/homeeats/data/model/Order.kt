@@ -1,4 +1,4 @@
-package com.example.homeeats.dataa
+package com.project.homeeats.data.model
 
 class Order {
 }

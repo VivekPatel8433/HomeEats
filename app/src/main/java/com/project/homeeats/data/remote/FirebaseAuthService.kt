@@ -1,4 +1,4 @@
-package com.example.homeeats.remote
+package com.project.homeeats.data.remote
 
 class FirebaseAuthService {
 }

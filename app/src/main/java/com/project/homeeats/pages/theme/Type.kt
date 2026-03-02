@@ -1,4 +1,4 @@
-package com.example.homeeats.pages.theme
+package com.project.homeeats.pages.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

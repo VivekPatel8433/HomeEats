@@ -1,4 +1,4 @@
-package com.example.homeeats.pages.theme.auth
+package com.project.homeeats.pages.theme.auth
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring

@@ -1,4 +1,4 @@
-package com.example.homeeats.viewmodel
+package com.project.homeeats.viewmodel
 
 class AuthViewModel {
 }

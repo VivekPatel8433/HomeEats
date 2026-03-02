@@ -1,2 +1,4 @@
-package com.example.homeeats.repository.data 
+package com.project.homeeats.data.repository
 
+class OrderRepository {
+}

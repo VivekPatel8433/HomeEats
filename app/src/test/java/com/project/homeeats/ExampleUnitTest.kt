@@ -1,4 +1,4 @@
-package com.example.homeeats
+package com.project.homeeats
 
 import org.junit.Test
 
