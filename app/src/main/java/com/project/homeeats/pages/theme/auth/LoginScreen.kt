@@ -110,7 +110,7 @@ fun LoginScreen(
 
             // ── App Icon ──────────────────────────────────────────────────
             Image(
-                painter = painterResource(R.drawable.applogo),
+                painter = painterResource(R.drawable.homeeats_logo),
                 contentDescription = "HomeEats Logo",
                 modifier = Modifier
                     .size(140.dp)
