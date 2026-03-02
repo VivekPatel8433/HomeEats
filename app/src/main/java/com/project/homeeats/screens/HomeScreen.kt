@@ -1,4 +1,4 @@
-package com.project.homeeats.pages.home
+package com.project.homeeats.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

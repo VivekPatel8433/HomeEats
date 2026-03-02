@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import com.project.homeeats.pages.theme.auth.LoginScreen
 import com.project.homeeats.pages.theme.auth.RegisterScreen
+import com.project.homeeats.screens.HomeScreen
 import com.project.homeeats.screens.IntroductionScreen
 
 class MainActivity : ComponentActivity() {
@@ -41,5 +42,7 @@ fun AppEntry() {
                 currentScreen = if (isChef) "chef_home" else "home"
             },
             onLoginClick = { currentScreen = "login" }
-        )      }
+        )
+        "home" -> HomeScreen()
+    }
 }
