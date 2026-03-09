@@ -49,10 +49,9 @@ fun getGreeting(): String {
  * - Bottom navigation
  */
 @Composable
-fun HomeScreen() {
-
+fun HomeScreen(onProfileClick: () -> Unit = {}) {
     Scaffold(
-        bottomBar = { BottomNavigationBar() },
+        bottomBar = { BottomNavigationBar(onProfileClick = onProfileClick) },
         containerColor = Color(0xFFF4EDEA)
     ) { padding ->
 
@@ -223,7 +222,7 @@ fun FoodCard(
  * Bottom Navigation Bar
  */
 @Composable
-fun BottomNavigationBar() {
+fun BottomNavigationBar(onProfileClick: () -> Unit = {}) {
     NavigationBar {
         NavigationBarItem(
             selected = true,
@@ -245,7 +244,7 @@ fun BottomNavigationBar() {
         )
         NavigationBarItem(
             selected = false,
-            onClick = {},
+            onClick = onProfileClick,  // wire it up here
             icon = { Icon(Icons.Default.Person, contentDescription = "Profile") },
             label = { Text("Profile") }
         )

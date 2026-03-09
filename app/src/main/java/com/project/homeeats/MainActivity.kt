@@ -9,6 +9,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import com.project.homeeats.pages.theme.auth.LoginScreen
 import com.project.homeeats.pages.theme.auth.RegisterScreen
+import com.example.homeeats.pages.theme.chef.AddDishScreen
+import com.example.homeeats.pages.theme.chef.ChefHomeScreen
+import com.example.homeeats.pages.theme.customer.ProfileScreen
 import com.project.homeeats.screens.HomeScreen
 import com.project.homeeats.screens.IntroductionScreen
 
@@ -43,6 +46,19 @@ fun AppEntry() {
             },
             onLoginClick = { currentScreen = "login" }
         )
-        "home" -> HomeScreen()
+        "home" -> HomeScreen(
+            onProfileClick = { currentScreen = "profile" }
+        )
+        "profile" -> ProfileScreen(
+            onSwitchToChef = { currentScreen = "chef_home" },
+            onHome = { currentScreen = "home" }
+        )
+        "chef_home" -> ChefHomeScreen(
+            onAddDish = { currentScreen = "add_dish" },
+            onBack = { currentScreen = "profile" }
+        )
+        "add_dish" -> AddDishScreen(
+            onBack = { currentScreen = "chef_home" }
+        )
     }
 }
