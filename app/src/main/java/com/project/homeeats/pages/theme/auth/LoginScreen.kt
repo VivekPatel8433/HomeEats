@@ -31,7 +31,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.TextStyle
 import com.project.homeeats.R
 
-// ─── Colors ───────────────────────────────────────────────────────────────────
+// Colours
 
 private val BackgroundBeige   = Color(0xFFF2EDE8)
 private val CardWhite         = Color(0xFFFAF7F5)
@@ -44,7 +44,7 @@ private val TextLight         = Color(0xFFA09896)
 private val InputBorder       = Color(0xFFE5DDD9)
 private val InputBackground   = Color(0xFFF5F0ED)
 
-// ─── Login Screen ─────────────────────────────────────────────────────────────
+// Login Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,7 +59,7 @@ fun LoginScreen(
 
     val focusManager = LocalFocusManager.current
 
-    // Subtle entrance animation
+    // Entrance animation
     val alphaAnim by animateFloatAsState(
         targetValue = 1f,
         animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing),
@@ -108,7 +108,7 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // ── App Icon ──────────────────────────────────────────────────
+            // App Icon
             Image(
                 painter = painterResource(R.drawable.homeeats_logo),
                 contentDescription = "HomeEats Logo",
@@ -117,7 +117,7 @@ fun LoginScreen(
 //                    .clip(RoundedCornerShape(150.dp))
             )
 
-            // ── Brand Name ────────────────────────────────────────────────
+            // Brand Name
             Text(
                 text = "HomeEats",
                 style = TextStyle(
@@ -142,7 +142,7 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            // ── Email Field ───────────────────────────────────────────────
+            // Email Field
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = "Email",
@@ -189,7 +189,7 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(18.dp))
 
-            // ── Password Field ────────────────────────────────────────────
+            // Password Field
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = "Password",
@@ -252,7 +252,7 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(28.dp))
 
-            // ── Login Button ──────────────────────────────────────────────
+            // Login Button
             val buttonScale by animateFloatAsState(
                 targetValue = if (isLoading) 0.97f else 1f,
                 animationSpec = spring(stiffness = Spring.StiffnessMedium),
@@ -309,7 +309,7 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(22.dp))
 
-            // ── Register Link ─────────────────────────────────────────────
+            // Register Link
             Text(
                 text = buildAnnotatedString {
                     withStyle(

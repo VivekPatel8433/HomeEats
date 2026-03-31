@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "608198754249",
+    "project_id": "homeeats-e6ae3",
+    "storage_bucket": "homeeats-e6ae3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608198754249:android:dfbe7abe1e9f580df0f218",
+        "android_client_info": {
+          "package_name": "com.homeeats"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWva5Q492F45BrjbpyK7GHLdZdHkCsWI0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

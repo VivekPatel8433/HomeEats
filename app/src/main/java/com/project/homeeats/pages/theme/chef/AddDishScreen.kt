@@ -1,4 +1,4 @@
-package com.example.homeeats.pages.theme.chef
+package com.project.homeeats.pages.theme.chef
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

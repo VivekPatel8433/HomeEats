@@ -29,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.project.homeeats.R
 
-// ─── Colors (shared with LoginScreen) ────────────────────────────────────────
+// Colors (shared with LoginScreen)
 
 private val BackgroundBeige  = Color(0xFFF2EDE8)
 private val CardWhite        = Color(0xFFFAF7F5)
@@ -43,7 +43,7 @@ private val InputBorder      = Color(0xFFE5DDD9)
 private val InputBackground  = Color(0xFFF5F0ED)
 private val SegmentInactive  = Color(0xFFEDE6E2)
 
-// ─── Register Screen ──────────────────────────────────────────────────────────
+// Register Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -115,7 +115,7 @@ fun RegisterScreen(
         ) {
             Spacer(modifier = Modifier.height(48.dp))
 
-            // ── App Icon ──────────────────────────────────────────────────
+            // App Icon
             Image(
                 painter = painterResource(R.drawable.homeeats_logo),
                 contentDescription = "HomeEats Logo",
@@ -124,7 +124,7 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // ── Title ─────────────────────────────────────────────────────
+            // Tittle
             Text(
                 text = "Create Account",
                 style = TextStyle(
@@ -137,7 +137,7 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // ── Full Name ─────────────────────────────────────────────────
+            // Full Name
             InputField(
                 label = "Full Name",
                 value = name,
@@ -150,7 +150,7 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // ── Email ─────────────────────────────────────────────────────
+            // Email
             InputField(
                 label = "Email",
                 value = email,
@@ -163,7 +163,7 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // ── Phone Number ──────────────────────────────────────────────
+            // Phone Number
             InputField(
                 label = "Phone Number",
                 value = phone,
@@ -176,7 +176,7 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // ── Password ──────────────────────────────────────────────────
+            // Password
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = "Password",
@@ -219,7 +219,7 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // ── Role Toggle ───────────────────────────────────────────────
+            // Role Toggle
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = "I am a",
@@ -298,7 +298,7 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(28.dp))
 
-            // ── Create Account Button ─────────────────────────────────────
+            // Create Account Button
             val buttonScale by animateFloatAsState(
                 targetValue = if (isLoading) 0.97f else 1f,
                 animationSpec = spring(stiffness = Spring.StiffnessMedium),
@@ -352,7 +352,7 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // ── Login Link ────────────────────────────────────────────────
+            // Login Link
             Text(
                 text = buildAnnotatedString {
                     withStyle(SpanStyle(color = TextMedium, fontSize = 14.sp, fontWeight = FontWeight.Normal)) {
@@ -375,8 +375,7 @@ fun RegisterScreen(
     }
 }
 
-// ─── Reusable Input Field ─────────────────────────────────────────────────────
-
+// Reusable Input Field
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun InputField(
@@ -421,8 +420,6 @@ private fun InputField(
         )
     }
 }
-
-// ─── Preview ──────────────────────────────────────────────────────────────────
 
 @Preview(showBackground = true, widthDp = 390, heightDp = 844)
 @Composable
