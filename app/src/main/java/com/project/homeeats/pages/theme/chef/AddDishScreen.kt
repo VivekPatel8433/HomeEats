@@ -1,19 +1,29 @@
 package com.project.homeeats.pages.theme.chef
 
+import com.project.homeeats.data.model.Dish
+
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -24,16 +34,32 @@ import com.project.homeeats.pages.theme.Coral
 import com.project.homeeats.pages.theme.Gray
 import com.project.homeeats.pages.theme.Peach
 import com.project.homeeats.pages.theme.WarmOffWhite
+import coil.compose.AsyncImage
+import com.project.homeeats.utils.ImageUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddDishScreen(
+    dishToEdit: Dish? = null,
     onBack: () -> Unit = {},
-    onSave: (name: String, description: String, price: String) -> Unit = { _, _, _ -> }
+    onSave: (name: String, description: String, price: String, imageUrl: String) -> Unit = { _, _, _, _ -> }
 ) {
-    var dishName by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var price by remember { mutableStateOf("") }
+    var dishName by remember(dishToEdit) { mutableStateOf(dishToEdit?.name ?: "") }
+    var description by remember(dishToEdit) { mutableStateOf(dishToEdit?.description ?: "") }
+    var price by remember(dishToEdit) { mutableStateOf(if (dishToEdit?.price != null && dishToEdit.price > 0) dishToEdit.price.toString() else "") }
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var base64Image by remember { mutableStateOf("") }
+    val context = LocalContext.current
+
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            selectedImageUri = it
+            val encoded = ImageUtils.uriToBase64(context, it)
+            if (encoded != null) base64Image = encoded
+        }
+    }
 
     Scaffold(
         containerColor = WarmOffWhite,
@@ -41,7 +67,7 @@ fun AddDishScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Add New Dish",
+                        text = if (dishToEdit != null) "Edit Dish" else "Add New Dish",
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         color = Charcoal
@@ -50,7 +76,7 @@ fun AddDishScreen(
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBack,
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
                             tint = Charcoal
                         )
@@ -85,18 +111,37 @@ fun AddDishScreen(
                     .background(
                         color = Color(0xFFFDE8E0),
                         shape = RoundedCornerShape(12.dp)
-                    ),
+                    )
+                    .clip(RoundedCornerShape(12.dp))
+                    .clickable { imagePickerLauncher.launch("image/*") },
                 contentAlignment = Alignment.Center
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        painter = painterResource(id = android.R.drawable.ic_menu_upload),
-                        contentDescription = "Upload",
-                        tint = Gray,
-                        modifier = Modifier.size(32.dp)
+                if (selectedImageUri != null) {
+                    AsyncImage(
+                        model = selectedImageUri,
+                        contentDescription = "Selected Dish Image",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = "Upload Photo", color = Gray, fontSize = 14.sp)
+                } else if (dishToEdit?.imageUrl?.isNotEmpty() == true) {
+                    val imageModel = remember(dishToEdit.imageUrl) { com.project.homeeats.utils.ImageUtils.base64ToByteArray(dishToEdit.imageUrl) ?: dishToEdit.imageUrl }
+                    AsyncImage(
+                        model = imageModel,
+                        contentDescription = "Dish Image",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            painter = painterResource(id = android.R.drawable.ic_menu_camera),
+                            contentDescription = "Upload",
+                            tint = Coral,
+                            modifier = Modifier.size(32.dp)
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(text = "Tap to Upload Photo", color = Charcoal, fontSize = 14.sp)
+                    }
                 }
             }
 
@@ -182,7 +227,7 @@ fun AddDishScreen(
 
             // Save Button
             Button(
-                onClick = { onSave(dishName, description, price) },
+                onClick = { onSave(dishName, description, price, base64Image) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp),

@@ -35,7 +35,11 @@ class OrderViewModel(
     // Call once when OrdersScreen enters composition
     fun loadOrders(customerId: String) {
         viewModelScope.launch {
-            repository.getMyOrders(customerId).collect { _orders.value = it }
+            try {
+                repository.getMyOrders(customerId).collect { _orders.value = it }
+            } catch (e: Exception) {
+                // Ignore permission error on logout
+            }
         }
     }
 

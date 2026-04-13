@@ -17,11 +17,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.project.homeeats.data.model.Order
+import com.project.homeeats.pages.theme.Charcoal
+import com.project.homeeats.pages.theme.Coral
+import com.project.homeeats.pages.theme.Gray
+import com.project.homeeats.pages.theme.WarmOffWhite
 import com.project.homeeats.viewmodel.OrderUiState
 import com.project.homeeats.viewmodel.OrderViewModel
 
-private val Accent = Color(0xFFE86A6A)
-private val Background = Color(0xFFF4EDEA)
+private val Accent = Coral
+private val Background = WarmOffWhite
 
 @Composable
 fun OrdersScreen(
@@ -43,7 +47,7 @@ fun OrdersScreen(
                 .padding(padding)
                 .padding(horizontal = 18.dp, vertical = 14.dp)
         ) {
-            Text("My Orders", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+            Text("My Orders", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Charcoal)
             Spacer(Modifier.height(12.dp))
 
             when (uiState) {
@@ -72,11 +76,11 @@ fun OrdersScreen(
                                 Icon(
                                     Icons.Default.Receipt,
                                     contentDescription = "No orders",
-                                    tint = Color(0xFF8A8A8A),
+                                    tint = Gray,
                                     modifier = Modifier.size(54.dp)
                                 )
                                 Spacer(Modifier.height(10.dp))
-                                Text("No orders yet", color = Color(0xFF8A8A8A), fontSize = 14.sp)
+                                Text("No orders yet", color = Gray, fontSize = 14.sp)
                             }
                         }
                     } else {
@@ -119,7 +123,8 @@ private fun OrderCard(order: Order) {
                 Text(
                     text = "Order #${order.id.takeLast(6).uppercase()}",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp
+                    fontSize = 15.sp,
+                    color = Charcoal
                 )
                 Surface(
                     shape = RoundedCornerShape(50),
@@ -148,13 +153,13 @@ private fun OrderCard(order: Order) {
                     Text(
                         text = "${item.quantity}× ${item.dishName}",
                         fontSize = 14.sp,
-                        color = Color(0xFF444444),
+                        color = Charcoal,
                         modifier = Modifier.weight(1f)
                     )
                     Text(
                         text = "${"%.2f".format(item.price * item.quantity)}",
                         fontSize = 14.sp,
-                        color = Color(0xFF444444)
+                        color = Charcoal
                     )
                 }
             }
@@ -168,7 +173,7 @@ private fun OrderCard(order: Order) {
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("Total", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                Text("Total", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Charcoal)
                 Text(
                     text = "$${"%.2f".format(order.items.sumOf { it.price * it.quantity })}",
                     fontWeight = FontWeight.Bold,
