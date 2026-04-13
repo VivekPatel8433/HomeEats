@@ -46,6 +46,7 @@ class MainActivity : ComponentActivity() {
             var currentScreen by remember {
                 mutableStateOf(if (authViewModel.isLoggedIn) Screen.Home else Screen.Intro)
             }
+            var dishToEdit by remember { mutableStateOf<com.project.homeeats.data.model.Dish?>(null) }
 
             // React to auth transitions
             LaunchedEffect(authState) {
@@ -138,12 +139,19 @@ class MainActivity : ComponentActivity() {
                 }
 
                 Screen.Profile -> ProfileScreen(
-                    onSwitchToChef = {
+                    userName = currentUser?.name?.takeIf { it.isNotBlank() } ?: "Unknown User",
+                    userRole = currentUser?.role?.replaceFirstChar { it.uppercase() } ?: "Customer",
+                    onBecomeChef = {
                         authViewModel.switchToChef()
+                        Toast.makeText(this@MainActivity, "You are now a Chef! You can switch to the Chef View.", Toast.LENGTH_SHORT).show()
+                    },
+                    onNavigateToChef = {
                         currentScreen = Screen.ChefHome
                     },
                     onHelpSupport = { /* TODO */ },
                     onLogOut = {
+                        cartViewModel.clearCart()
+                        orderViewModel.resetOrderState()
                         authViewModel.logout()
                         currentScreen = Screen.Login
                     },
@@ -161,8 +169,14 @@ class MainActivity : ComponentActivity() {
 
                     ChefHomeScreen(
                         dishes       = chefDishes,
-                        onAddDish    = { currentScreen = Screen.AddDish },
-                        onEditDish   = { dish -> dishViewModel.updateDish(dish) },
+                        onAddDish    = { 
+                            dishToEdit = null
+                            currentScreen = Screen.AddDish 
+                        },
+                        onEditDish   = { dish -> 
+                            dishToEdit = dish
+                            currentScreen = Screen.AddDish 
+                        },
                         onDeleteDish = { dish -> dishViewModel.deleteDish(dish.id) },
                         onBack       = { currentScreen = Screen.Profile }
                     )
@@ -170,15 +184,28 @@ class MainActivity : ComponentActivity() {
 
                 Screen.AddDish -> {
                     AddDishScreen(
+                        dishToEdit = dishToEdit,
                         onBack = { currentScreen = Screen.ChefHome },
-                        onSave = { name, description, price ->
-                            dishViewModel.addDish(
-                                chefId      = currentUser?.uid ?: "",
-                                chefName    = currentUser?.name ?: "",
-                                name        = name,
-                                description = description,
-                                price       = price.toDoubleOrNull() ?: 0.0
-                            )
+                        onSave = { name, description, price, imageUrl ->
+                            if (dishToEdit == null) {
+                                dishViewModel.addDish(
+                                    chefId      = currentUser?.uid ?: "",
+                                    chefName    = currentUser?.name ?: "",
+                                    name        = name,
+                                    description = description,
+                                    price       = price.toDoubleOrNull() ?: 0.0,
+                                    imageUrl    = imageUrl
+                                )
+                            } else {
+                                dishViewModel.updateDish(
+                                    dishToEdit!!.copy(
+                                        name = name,
+                                        description = description,
+                                        price = price.toDoubleOrNull() ?: 0.0,
+                                        imageUrl = if (imageUrl.isNotEmpty()) imageUrl else dishToEdit!!.imageUrl
+                                    )
+                                )
+                            }
                             currentScreen = Screen.ChefHome
                         }
                     )

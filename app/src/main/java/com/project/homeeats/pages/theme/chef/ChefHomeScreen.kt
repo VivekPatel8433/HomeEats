@@ -9,8 +9,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,7 +44,7 @@ fun ChefHomeScreen(
                 title = { Text("My Dishes", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Charcoal) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Charcoal)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Charcoal)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = WarmOffWhite)
@@ -86,7 +88,15 @@ fun DishCard(dish: Dish, onEdit: () -> Unit, onDelete: () -> Unit) {
     ) {
         Row(modifier = Modifier.fillMaxWidth().padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(modifier = Modifier.size(100.dp).clip(RoundedCornerShape(15.dp)).background(Color(0xFFEEEEEE))) {
-                if (dish.imageRes != 0) {
+                if (dish.imageUrl.isNotEmpty()) {
+                    val imageModel = remember(dish.imageUrl) { com.project.homeeats.utils.ImageUtils.base64ToByteArray(dish.imageUrl) ?: dish.imageUrl }
+                    coil.compose.AsyncImage(
+                        model = imageModel,
+                        contentDescription = dish.name,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else if (dish.imageRes != 0) {
                     Image(
                         painter = painterResource(id = dish.imageRes),
                         contentDescription = dish.name,

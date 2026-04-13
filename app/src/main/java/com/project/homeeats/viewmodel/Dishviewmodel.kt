@@ -31,13 +31,21 @@ class DishViewModel(
 
     fun loadAllDishes() {
         viewModelScope.launch {
-            repository.getAllDishes().collect { _allDishes.value = it }
+            try {
+                repository.getAllDishes().collect { _allDishes.value = it }
+            } catch (e: Exception) {
+                // Ignore permission error on logout
+            }
         }
     }
 
     fun loadChefDishes(chefId: String) {
         viewModelScope.launch {
-            repository.getChefDishes(chefId).collect { _chefDishes.value = it }
+            try {
+                repository.getChefDishes(chefId).collect { _chefDishes.value = it }
+            } catch (e: Exception) {
+                // Ignore permission error on logout
+            }
         }
     }
 
@@ -46,7 +54,8 @@ class DishViewModel(
         chefName: String,
         name: String,
         description: String,
-        price: Double           // ✅ Double
+        price: Double,
+        imageUrl: String = ""
     ) {
         if (price <= 0.0) {
             _actionState.value = DishUiState.Error("Price must be greater than 0")
@@ -54,7 +63,7 @@ class DishViewModel(
         }
         viewModelScope.launch {
             _actionState.value = DishUiState.Loading
-            repository.addDish(chefId, chefName, name, description, price)
+            repository.addDish(chefId, chefName, name, description, price, imageUrl)
                 .onSuccess { _actionState.value = DishUiState.Success("Dish added!") }
                 .onFailure { e -> _actionState.value = DishUiState.Error(e.message ?: "Failed to add dish") }
         }

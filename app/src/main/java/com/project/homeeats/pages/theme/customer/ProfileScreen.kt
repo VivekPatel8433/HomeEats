@@ -10,6 +10,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,7 +33,10 @@ import com.project.homeeats.pages.theme.WarmOffWhite
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-    onSwitchToChef: () -> Unit = {},
+    userName: String = "John Doe",
+    userRole: String = "Customer",
+    onBecomeChef: () -> Unit = {},
+    onNavigateToChef: () -> Unit = {},
     onHelpSupport: () -> Unit = {},
     onLogOut: () -> Unit = {},
     onHome: () -> Unit = {},
@@ -46,6 +53,9 @@ fun ProfileScreen(
             )
         }
     ) { innerPadding ->
+        var showChefModal by remember { mutableStateOf(false) }
+        var showTermsModal by remember { mutableStateOf(false) }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -89,13 +99,13 @@ fun ProfileScreen(
 
                 Column {
                     Text(
-                        text = "John Doe",
+                        text = userName,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Charcoal
                     )
                     Text(
-                        text = "Customer",
+                        text = userRole,
                         fontSize = 14.sp,
                         color = Gray
                     )
@@ -104,51 +114,52 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Set up business profile banner
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(Color(0xFFFDE8E0))
-                    .border(1.dp, Peach, RoundedCornerShape(12.dp))
-                    .clickable { onSwitchToChef() }
-                    .padding(16.dp)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                            .background(Color(0xFFF5D5CC)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(id = android.R.drawable.ic_menu_myplaces),
-                            contentDescription = "Chef",
-                            tint = Coral,
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
+            // Set up business profile banner (Only show for customers)
+            if (!userRole.equals("Chef", ignoreCase = true)) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color(0xFFFDE8E0))
+                        .border(1.dp, Peach, RoundedCornerShape(12.dp))
+                        .clickable { showTermsModal = true }
+                        .padding(16.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clip(CircleShape)
+                                .background(Color(0xFFF5D5CC)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(id = android.R.drawable.ic_menu_myplaces),
+                                contentDescription = "Chef",
+                                tint = Coral,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
 
-                    Spacer(modifier = Modifier.width(12.dp))
+                        Spacer(modifier = Modifier.width(12.dp))
 
-                    Column {
-                        Text(
-                            text = "Set up your business profile",
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 15.sp,
-                            color = Charcoal
-                        )
-                        Text(
-                            text = "Start selling your homemade dishes",
-                            fontSize = 13.sp,
-                            color = Gray
-                        )
+                        Column {
+                            Text(
+                                text = "Set up your business profile",
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 15.sp,
+                                color = Charcoal
+                            )
+                            Text(
+                                text = "Start selling your homemade dishes",
+                                fontSize = 13.sp,
+                                color = Gray
+                            )
+                        }
                     }
                 }
+                Spacer(modifier = Modifier.height(16.dp))
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             // Switch to Chef View
             ProfileMenuItem(
@@ -162,7 +173,13 @@ fun ProfileScreen(
                 },
                 label = "Switch to Chef View",
                 textColor = Charcoal,
-                onClick = onSwitchToChef
+                onClick = {
+                    if (userRole.equals("Chef", ignoreCase = true)) {
+                        onNavigateToChef()
+                    } else {
+                        showChefModal = true
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -197,6 +214,42 @@ fun ProfileScreen(
                 label = "Log Out",
                 textColor = Coral,
                 onClick = onLogOut
+            )
+        }
+
+        if (showChefModal) {
+            AlertDialog(
+                onDismissRequest = { showChefModal = false },
+                title = { Text("Access Denied", fontWeight = FontWeight.Bold, color = Charcoal) },
+                text = { Text("You need to set up a business profile before accessing the Chef View. Please tap the 'Set up your business profile' banner to get started.", color = Charcoal) },
+                confirmButton = {
+                    TextButton(onClick = { showChefModal = false }) {
+                        Text("OK", color = Coral, fontWeight = FontWeight.Bold)
+                    }
+                },
+                containerColor = WarmOffWhite
+            )
+        }
+
+        if (showTermsModal) {
+            AlertDialog(
+                onDismissRequest = { showTermsModal = false },
+                title = { Text("Terms & Conditions", fontWeight = FontWeight.Bold, color = Charcoal) },
+                text = { Text("By setting up a business profile, you agree to our terms of service, including maintaining food safety guidelines, adhering to payment fees, and following our community standards as a Chef.", color = Charcoal) },
+                confirmButton = {
+                    TextButton(onClick = { 
+                        showTermsModal = false
+                        onBecomeChef()
+                    }) {
+                        Text("Accept", color = Coral, fontWeight = FontWeight.Bold)
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showTermsModal = false }) {
+                        Text("Decline", color = Gray, fontWeight = FontWeight.Bold)
+                    }
+                },
+                containerColor = WarmOffWhite
             )
         }
     }
